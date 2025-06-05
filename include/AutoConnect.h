@@ -1,4 +1,4 @@
-#ifndef AUTOCONNECT_H
+/*#ifndef AUTOCONNECT_H
 #define AUTOCONNECT_H
 
 #include "User.h"
@@ -11,4 +11,4 @@ public:
     // Other main functions declarations
 };
 
-#endif // AUTOCONNECT_H
+#endif // AUTOCONNECT_H*/
