@@ -3,6 +3,7 @@
 #include <nlohmann/json.hpp>
 #include <sstream>
 #include <iostream>
+#include <iomanip>
 
 using json = nlohmann::json;
 
@@ -17,7 +18,7 @@ Location getCoordinatesFromLocationName(const std::string& placeName) {
 
     if (!curl) {
         std::cerr << "Error: CURL init failed.\n";
-        return Location(0,0);
+        return Location(0.0, 0.0);
     }
 
     std::ostringstream url;
@@ -35,20 +36,23 @@ Location getCoordinatesFromLocationName(const std::string& placeName) {
 
     if (res != CURLE_OK) {
         std::cerr << "Error: Network request failed.\n";
-        return Location(0,0);
+        return Location(0.0, 0.0);
     }
 
     try {
         auto arr = json::parse(buffer);
         if (!arr.is_array() || arr.empty()) {
             std::cerr << "Location not found.\n";
-            return Location(0,0);
+            return Location(0.0, 0.0);
         }
+
         double lat = std::stod(arr[0]["lat"].get<std::string>());
         double lon = std::stod(arr[0]["lon"].get<std::string>());
-        return Location(static_cast<int>(lat), static_cast<int>(lon));
+
+        return Location(lat, lon);
     } catch (...) {
         std::cerr << "Error: JSON parse failed.\n";
-        return Location(0,0);
+        return Location(0.0, 0.0);
     }
 }
+
