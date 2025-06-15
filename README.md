@@ -43,13 +43,13 @@ AutoConnect/
 
 ---
 
-## ⚙️ How to Run
+##  How to Run
 
-### 🔧 Requirements
+### Requirements
 - C++17 compiler (e.g., g++)
 - [libcurl](https://curl.se/libcurl/) installed
 - Internet connection (for location API)
-### 🐧 Linux / WSL
+### Linux / WSL
 
 ```bash
 sudo apt install libcurl4-openssl-dev
