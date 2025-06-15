@@ -1,118 +1,108 @@
-/*#include <iostream>
-#include "AutoConnect.h"
-
-int main() {
-    std::cout << "Welcome to AutoConnect!" << std::endl;
-    // Your main program code
-    return 0;
-}*/
-
-
 #include <iostream>
 #include <vector>
-#include <algorithm>
+#include <queue>
+#include <limits>
 #include "RideRequest.h"
+#include "User.h"
+#include "AutoConnect.h"
 
-void createRequest(std::vector<RideRequest>& requests, int& requestCounter) {
-    int studentId;
-    std::string pickup, dest;
-    int urgencyInput;
+using namespace std;
 
-    std::cout << "\n--- Create Ride Request ---\n";
-    std::cout << "Enter Student ID: ";
-    std::cin >> studentId;
+priority_queue<RideRequest> requestQueue;
+vector<Driver> drivers;
 
-    std::cin.ignore(); // clear buffer
-    std::cout << "Enter Pickup Location: ";
-    std::getline(std::cin, pickup);
-
-    std::cout << "Enter Destination: ";
-    std::getline(std::cin, dest);
-
-    std::cout << "Urgency (0 = LOW, 1 = MEDIUM, 2 = HIGH): ";
-    std::cin >> urgencyInput;
-
-    RideRequest req(requestCounter++, studentId, pickup, dest, static_cast<UrgencyLevel>(urgencyInput));
-    requests.push_back(req);
-    std::cout << "Ride request created successfully!\n";
+Location inputLocation() {
+    int x, y;
+    cout << "Enter location coordinates (x y): ";
+    cin >> x >> y;
+    return Location(x, y);
 }
 
-void viewRequests(const std::vector<RideRequest>& requests) {
-    std::cout << "\n--- Ride Requests ---\n";
+void studentRequestRide() {
+    string name;
+    int urgency;
+    cout << "\n--- Student Ride Request ---\n";
+    cout << "Enter your name: ";
+    cin >> name;
+    Location loc = inputLocation();
+    cout << "Enter urgency (1 to 5): ";
+    cin >> urgency;
+    requestQueue.push(RideRequest(name, loc, urgency));
+    cout << "Ride request submitted!\n";
+}
 
-    std::vector<RideRequest> sorted = requests;
-    std::sort(sorted.begin(), sorted.end(), [](const RideRequest& a, const RideRequest& b) {
-        return a.urgency > b.urgency;
-    });
+void driverAcceptRide() {
+    string name;
+    cout << "\n--- Driver Login ---\n";
+    cout << "Enter your name: ";
+    cin >> name;
+    Location loc = inputLocation();
 
-    for (const auto& req : sorted) {
-        std::cout << "Request ID: " << req.requestId << " | Student ID: " << req.studentId
-                  << " | From: " << req.pickupLocation << " | To: " << req.destination
-                  << " | Urgency: " << req.urgency << " | Handled: "
-                  << (req.isHandled ? "Yes" : "No") << "\n";
+    Driver driver(name, loc);
+    drivers.push_back(driver);
+    int driverIndex = drivers.size() - 1;
+
+    if (requestQueue.empty()) {
+        cout << "No requests available.\n";
+        return;
     }
-}
 
-void handleRequest(std::vector<RideRequest>& requests) {
-    int reqId;
-    std::cout << "\n--- Handle Ride Request ---\n";
-    std::cout << "Enter Request ID to mark as handled: ";
-    std::cin >> reqId;
+    vector<RideRequest> temp;
+    RideRequest bestRequest("", Location(), -1);
+    double bestDistance = numeric_limits<double>::max();
+    bool found = false;
 
-    for (auto& req : requests) {
-        if (req.requestId == reqId) {
-            req.isHandled = true;
-            std::cout << "Request marked as handled.\n";
-            return;
-        }
-    }
-    std::cout << "Request ID not found.\n";
-}
+    while (!requestQueue.empty()) {
+        RideRequest r = requestQueue.top();
+        requestQueue.pop();
+        temp.push_back(r);
 
-void inputFeedback(std::vector<RideRequest>& requests) {
-    int reqId;
-    std::string feedback;
-    std::cin.ignore(); // clear buffer
-    std::cout << "\n--- Input Feedback ---\n";
-    std::cout << "Enter Request ID: ";
-    std::cin >> reqId;
-    std::cin.ignore();
-
-    for (auto& req : requests) {
-        if (req.requestId == reqId && req.isHandled) {
-            std::cout << "Enter feedback: ";
-            std::getline(std::cin, feedback);
-            req.feedback = feedback;
-            std::cout << "Feedback saved.\n";
-            return;
+        double d = driver.location.distanceTo(r.location);
+        if (!found || r.urgency > bestRequest.urgency || 
+           (r.urgency == bestRequest.urgency && d < bestDistance)) {
+            bestRequest = r;
+            bestDistance = d;
+            found = true;
         }
     }
 
-    std::cout << "Request ID not found or not handled yet.\n";
+    for (RideRequest r : temp) {
+        if (!(r.studentName == bestRequest.studentName && r.urgency == bestRequest.urgency)) {
+            requestQueue.push(r);
+        }
+    }
+
+    cout << "Nearest urgent request:\n";
+    cout << "Student: " << bestRequest.studentName << "\nUrgency: " << bestRequest.urgency
+         << "\nDistance: " << bestDistance << endl;
+
+    cout << "Accept this ride? (y/n): ";
+    char confirm;
+    cin >> confirm;
+    if (confirm == 'y' || confirm == 'Y') {
+        drivers[driverIndex].isAvailable = false;
+        cout << "Ride accepted.\n";
+    } else {
+        cout << "Ride not accepted.\n";
+    }
 }
 
 int main() {
-    std::vector<RideRequest> requests;
-    int requestCounter = 1;
     int choice;
-
     while (true) {
-        std::cout << "\n==== AutoConnect Menu ====\n";
-        std::cout << "1. Create Ride Request\n";
-        std::cout << "2. View Requests\n";
-        std::cout << "3. Handle Request\n";
-        std::cout << "4. Input Feedback\n";
-        std::cout << "5. Exit\n";
-        std::cout << "Enter your choice: ";
-        std::cin >> choice;
+        cout << "\n==== AutoConnect Menu ====\n";
+        cout << "1. Student - Request Ride\n";
+        cout << "2. Driver - Accept Ride\n";
+        cout << "3. Exit\n";
+        cout << "Choice: ";
+        cin >> choice;
 
         switch (choice) {
-            case 1: createRequest(requests, requestCounter); break;
-            case 2: viewRequests(requests); break;
-            case 3: handleRequest(requests); break;
-            case 4: inputFeedback(requests); break;
-            case 5: std::cout << "Exiting...\n"; return 0;
-            default: std::cout << "Invalid choice.\n";
+            case 1: studentRequestRide(); break;
+            case 2: driverAcceptRide(); break;
+            case 3: cout << "Goodbye!\n"; return 0;
+            default: cout << "Invalid input. Try again.\n";
         }
     }
 }
+
