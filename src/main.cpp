@@ -2,20 +2,26 @@
 #include <vector>
 #include <queue>
 #include <limits>
+#include <string>
+#include <limits>
 #include "RideRequest.h"
 #include "User.h"
 #include "AutoConnect.h"
+#include "GeoUtils.h"
 
 using namespace std;
 
 priority_queue<RideRequest> requestQueue;
 vector<Driver> drivers;
 
-Location inputLocation() {
-    int x, y;
-    cout << "Enter location coordinates (x y): ";
-    cin >> x >> y;
-    return Location(x, y);
+Location inputLocationByName(const string& prompt) {
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear buffer
+    string place;
+    cout << prompt;
+    getline(cin, place);
+    Location loc = getCoordinatesFromLocationName(place);
+    cout << "Coordinates fetched: (" << loc.x << ", " << loc.y << ")\n";
+    return loc;
 }
 
 void studentRequestRide() {
@@ -24,9 +30,12 @@ void studentRequestRide() {
     cout << "\n--- Student Ride Request ---\n";
     cout << "Enter your name: ";
     cin >> name;
-    Location loc = inputLocation();
+
+    Location loc = inputLocationByName("Enter your pickup location name: ");
+
     cout << "Enter urgency (1 to 5): ";
     cin >> urgency;
+
     requestQueue.push(RideRequest(name, loc, urgency));
     cout << "Ride request submitted!\n";
 }
@@ -36,7 +45,8 @@ void driverAcceptRide() {
     cout << "\n--- Driver Login ---\n";
     cout << "Enter your name: ";
     cin >> name;
-    Location loc = inputLocation();
+
+    Location loc = inputLocationByName("Enter your current location name: ");
 
     Driver driver(name, loc);
     drivers.push_back(driver);
@@ -58,8 +68,8 @@ void driverAcceptRide() {
         temp.push_back(r);
 
         double d = driver.location.distanceTo(r.location);
-        if (!found || r.urgency > bestRequest.urgency || 
-           (r.urgency == bestRequest.urgency && d < bestDistance)) {
+        if (!found || r.urgency > bestRequest.urgency ||
+            (r.urgency == bestRequest.urgency && d < bestDistance)) {
             bestRequest = r;
             bestDistance = d;
             found = true;
@@ -73,7 +83,8 @@ void driverAcceptRide() {
     }
 
     cout << "Nearest urgent request:\n";
-    cout << "Student: " << bestRequest.studentName << "\nUrgency: " << bestRequest.urgency
+    cout << "Student: " << bestRequest.studentName
+         << "\nUrgency: " << bestRequest.urgency
          << "\nDistance: " << bestDistance << endl;
 
     cout << "Accept this ride? (y/n): ";
