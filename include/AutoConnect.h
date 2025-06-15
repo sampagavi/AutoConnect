@@ -1,14 +1,9 @@
-/*#ifndef AUTOCONNECT_H
+#ifndef AUTOCONNECT_H
 #define AUTOCONNECT_H
 
-#include "User.h"
-#include "RideRequest.h"
+void studentRequestRide();
+void driverAcceptRide();
+Location inputLocation();
 
-class AutoConnect {
-public:
-    void addUser(const User& user);
-    void addRideRequest(const RideRequest& request);
-    // Other main functions declarations
-};
+#endif
 
-#endif // AUTOCONNECT_H*/
