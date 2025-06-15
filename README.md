@@ -98,7 +98,7 @@ cd AutoConnect
 ---
 ## Location API
 This project uses OpenStreetMap's Nominatim API to convert place names into coordinates.
-For example, entering "IIT Madras" returns its latitude and longitude.
+For example, entering "IIT Roorkee" returns its latitude and longitude.
 - No API key needed for basic usage.
 ---
 ## Sample Usage Flow
