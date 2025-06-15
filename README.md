@@ -46,23 +46,51 @@ AutoConnect/
 ##  How to Run
 
 ### Requirements
-- C++17 compiler (e.g., g++)
-- [libcurl](https://curl.se/libcurl/) installed
-- Internet connection (for location API)
-### Linux / WSL
-
-```bash
-sudo apt install libcurl4-openssl-dev
-g++ -std=c++17 -o autoconnect src/*.cpp -lcurl
+- C++17 or newer
+- libcurl (for making network requests)
+- Internet connection (for fetching live coordinates)
+- nlohmann/json.hpp (already included in the repo)
+### Running in GitHub Codespaces (Recommended)
+1. No local setup required. Just use GitHub’s built-in development environment:
+2. Click the green Code button on the GitHub repo → Choose Codespaces → Create codespace.
+3. Wait for the Codespace to load in the browser.
+4. In the terminal, run
+  ```bash
+  g++ -std=c++17 -o autoconnect src/*.cpp -Iinclude -lcurl
 ./autoconnect
 ```
-### Windows (MinGW or Git Bash)
-- Download and install libcurl for Windows from:https://curl.se/windows/
-- Compile
+5. Follow the menu to simulate student and driver ride interactions.
+(All dependencies including nlohmann/json.hpp are already included — no need to install anything else.)
 
+### Running on Linux (Ubuntu or WSL)
+- Install dependencies:
 ```bash
-g++ -std=c++17 -o autoconnect src/*.cpp -lcurl
-autoconnect.exe
+sudo apt update
+sudo apt install g++ libcurl4-openssl-dev
+```
+- Clone the repo and navigate to the project folder:
+ ```bash
+git clone https://github.com/yourusername/AutoConnect.git
+cd AutoConnect
+ ```
+- Compile and run the project:
+```bash
+g++ -std=c++17 -o autoconnect src/*.cpp -Iinclude -lcurl
+./autoconnect
+ ```
+### Windows (MinGW or Git Bash)
+- Install MinGW and make sure it's added to your PATH.
+- Download and install libcurl for Windows from: https://curl.se/windows/
+- Ensure nlohmann/json.hpp is in your include/ folder (already included in repo).
+- Open Git Bash or terminal and navigate to the project:
+```bash
+git clone https://github.com/yourusername/AutoConnect.git
+cd AutoConnect
+ ```
+- Compile and run
+```bash
+  g++ -std=c++17 -o autoconnect src/*.cpp -Iinclude -lcurl
+  ./autoconnect.exe
 ```
 ---
 ## Location API
