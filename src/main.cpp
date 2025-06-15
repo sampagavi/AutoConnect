@@ -3,6 +3,7 @@
 #include <queue>
 #include <limits>
 #include <string>
+#include <iomanip>  // for std::setprecision
 #include "RideRequest.h"
 #include "User.h"
 #include "AutoConnect.h"
@@ -14,12 +15,13 @@ priority_queue<RideRequest> requestQueue;
 vector<Driver> drivers;
 
 Location inputLocationByName(const string& prompt) {
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear buffer
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
     string place;
     cout << prompt;
     getline(cin, place);
     Location loc = getCoordinatesFromLocationName(place);
-    cout << "Coordinates fetched: (" << loc.x << ", " << loc.y << ")\n";
+    cout << fixed << setprecision(6); 
+    cout << "Coordinates fetched: (" << loc.latitude << ", " << loc.longitude << ")\n";
     return loc;
 }
 
@@ -76,15 +78,18 @@ void driverAcceptRide() {
     }
 
     for (RideRequest r : temp) {
-        if (!(r.studentName == bestRequest.studentName && r.urgency == bestRequest.urgency)) {
+        if (!(r.studentName == bestRequest.studentName &&
+              r.urgency == bestRequest.urgency &&
+              r.location.latitude == bestRequest.location.latitude &&
+              r.location.longitude == bestRequest.location.longitude)) {
             requestQueue.push(r);
         }
     }
 
-    cout << "Nearest urgent request:\n";
+    cout << "\nNearest urgent request:\n";
     cout << "Student: " << bestRequest.studentName
          << "\nUrgency: " << bestRequest.urgency
-         << "\nDistance: " << bestDistance << endl;
+         << "\nDistance: " << bestDistance << " units\n";
 
     cout << "Accept this ride? (y/n): ";
     char confirm;
