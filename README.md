@@ -58,15 +58,11 @@ Download and install libcurl
 
 Use:
 
-bash
-Copy
-Edit
 g++ -std=c++17 -Iinclude -o autoconnect src/*.cpp -lcurl
 autoconnect.exe
-🧪 Sample Usage
-pgsql
-Copy
-Edit
+
+##Sample Usage
+
 ==== AutoConnect Menu ====
 1. Student - Request Ride
 2. Driver - Accept Ride
@@ -81,9 +77,6 @@ Enter urgency (1 to 5): 5
 Ride request submitted!
 Driver logs in and sees the most urgent + nearby request:
 
-yaml
-Copy
-Edit
 --- Driver Login ---
 Enter your name: Ravi
 Enter your current location name: Library
@@ -98,7 +91,7 @@ Ride accepted.
 Location Search API (Nominatim)
 AutoConnect uses:
 https://nominatim.openstreetmap.org/search?q=PLACE_NAME&format=json&limit=1
- No API key required
+No API key required
  Example input: Main Gate, Hostel, CSE Department
 
  Notes
