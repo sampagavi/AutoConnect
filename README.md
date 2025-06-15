@@ -32,7 +32,9 @@ AutoConnect/
 │   ├── AutoConnect.h
 │   ├── GeoUtils.h
 │   ├── RideRequest.h
-│   └── User.h
+│   ├── User.h
+│   └── nlohmann/                
+│       └── json.hpp            
 ├── src/
 │   ├── GeoUtils.cpp
 │   ├── RideRequest.cpp
@@ -40,6 +42,7 @@ AutoConnect/
 │   └── main.cpp
 ├── README.md
 └── .gitignore
+
 
 ---
 
