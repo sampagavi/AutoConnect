@@ -2,12 +2,15 @@
 #define USER_H
 
 #include <string>
+#include <cmath>
 
 struct Location {
-    int x, y;
-    Location(int x = 0, int y = 0) : x(x), y(y) {}
+    double x, y;  // Changed from int to double
+    Location(double x = 0.0, double y = 0.0) : x(x), y(y) {}
 
-    double distanceTo(const Location& other) const;
+    double distanceTo(const Location& other) const {
+        return std::sqrt(std::pow(x - other.x, 2) + std::pow(y - other.y, 2));
+    }
 };
 
 class Driver {
