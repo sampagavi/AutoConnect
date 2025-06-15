@@ -22,6 +22,8 @@ Students often struggle to find autos during urgent situations (medical emergenc
 - Students request rides from terminal
 - Auto drivers can accept rides from queue
 - Clean, modular structure using C++ headers and classes
+- Real-world distance computation using latitude/longitude
+
 
 ---
 
@@ -97,8 +99,10 @@ cd AutoConnect
 ```
 ---
 ## Location API
-This project uses OpenStreetMap's Nominatim API to convert place names into coordinates.
-For example, entering "IIT Roorkee" returns its latitude and longitude.
+- This project uses OpenStreetMap's Nominatim API to convert place names into coordinates.
+- For example, entering "IIT Roorkee" returns its latitude and longitude.
+- Returned coordinates are now handled as floating-point values for improved precision.
+
 - No API key needed for basic usage.
 ---
 ## Sample Usage Flow
@@ -115,7 +119,7 @@ For example, entering "IIT Roorkee" returns its latitude and longitude.
 - Map visualization
 ---
 ## Imp points
-- API uses latitude & longitude, rounded to integer (for simplified distance calc)
+- API returns latitude & longitude as doubles. Calculations now use actual coordinates (no rounding), giving more accurate distances.
 - OpenStreetMap API has rate limits (1 request/sec). Avoid spamming requests
 - Add delays for production use or consider local cache of frequent locations
 ---
