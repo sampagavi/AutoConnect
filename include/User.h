@@ -1,30 +1,22 @@
-/*#ifndef USER_H
-#define USER_H
-
-#include <string>
-
-class User {
-public:
-    int id;
-    std::string name;
-    std::string contact;
-
-    User(int _id, std::string _name, std::string _contact);
-};
-
-#endif*/
 #ifndef USER_H
 #define USER_H
 
 #include <string>
 
-class User {
-public:
-    int id;
-    std::string name;
-    std::string contact;
+struct Location {
+    int x, y;
+    Location(int x = 0, int y = 0) : x(x), y(y) {}
 
-    User(int _id, const std::string& _name, const std::string& _contact);
+    double distanceTo(const Location& other) const;
 };
 
-#endif 
+class Driver {
+public:
+    std::string name;
+    Location location;
+    bool isAvailable;
+
+    Driver(std::string n, Location loc);
+};
+
+#endif
