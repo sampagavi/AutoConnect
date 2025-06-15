@@ -1,16 +1,12 @@
-/*#include "User.h"
+#include "User.h"
+#include <cmath>
 
-User::User(const std::string& name, int id) : name(name), id(id) {}
-
-std::string User::getName() const {
-    return name;
+double Location::distanceTo(const Location& other) const {
+    return sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y));
 }
 
-int User::getId() const {
-    return id;
-}*/
-
-#include "User.h"
-
-User::User(int _id, const std::string& _name, const std::string& _contact)
-    : id(_id), name(_name), contact(_contact) {}
+Driver::Driver(std::string n, Location loc) {
+    name = n;
+    location = loc;
+    isAvailable = true;
+}
