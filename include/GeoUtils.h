@@ -9,11 +9,11 @@ struct Location {
 
     Location(double lat = 0.0, double lon = 0.0) : latitude(lat), longitude(lon) {}
 
-    // Optional: Add distance calculation here if needed
     double distanceTo(const Location& other) const;
 };
 
 Location getCoordinatesFromLocationName(const std::string& placeName);
 
 #endif
+
 
